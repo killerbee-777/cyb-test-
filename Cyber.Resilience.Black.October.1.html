@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Cyber Resilience: Black October — интерактивный симулятор кибербезопасности. Пройдите 15 миссий и восстановите инфраструктуру.">
 <title>Cyber Resilience — Black October</title>
 <style>
 :root{--bg:#070d1c;--pn:#0f1a30;--ln:#243a63;--tx:#e6eeff;--mt:#93a8cf;--ac:#3cc8f0;--ac2:#ff9a3c;--rd:#e5484d;--ok:#3cc8a0;--am:#f0a93c;--r:12px;color-scheme:dark;box-sizing:border-box;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
@@ -72,6 +73,16 @@ h1{font-size:clamp(26px,5vw,44px);line-height:1.1;margin:6px 0;letter-spacing:.0
 .ring{width:120px;height:120px;border-radius:50%;border:4px solid var(--ok);margin:10px auto;display:grid;place-items:center;font-size:44px;animation:rg 2s infinite}@keyframes rg{50%{box-shadow:0 0 40px var(--ok)}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.cf{display:none}}
 @media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;left:0;top:0;width:100%;margin:0}}
+
+[hidden]{display:none!important}
+main{max-width:1120px;padding:28px 24px 48px}
+button{transition:background .2s,border-color .2s,transform .2s}button:active:not(:disabled){transform:translateY(1px)}
+.intro{text-align:left;padding-top:28px}.intro .eyebrow{font:12px ui-monospace,monospace;letter-spacing:.18em;color:var(--ac);display:flex;justify-content:space-between;border-bottom:1px solid var(--ln);padding-bottom:16px;margin-bottom:32px}
+.intro h1{font-family:Impact,'Arial Narrow',sans-serif;font-size:clamp(38px,6.8vw,78px);font-weight:800;letter-spacing:-.025em;max-width:1000px;line-height:1.02}
+.intro .lead{max-width:680px;margin:22px 0 28px;font-size:18px}.intro .vw{border-radius:6px;margin:24px 0}.intro .cta{border-radius:4px}
+.intro-footer{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.intro-footer small{color:var(--mt);font:12px ui-monospace,monospace}.intro-footer .gh{margin-left:auto}
+.vw video{object-fit:contain}.met span{min-width:0}.met{gap:12px}.modal{overflow-y:auto}.modal .card{max-height:90dvh;overflow-y:auto}
+@media(max-width:600px){main{padding:18px 14px 32px}.intro{padding-top:8px}.intro .eyebrow{font-size:10px;letter-spacing:.08em;margin-bottom:24px}.intro .lead{font-size:16px}.intro-footer .gh{margin-left:0}.dot{min-width:14px}.itm{overflow-wrap:anywhere}.met{font-size:14px}.nd{padding:12px}}
 </style></head><body>
 <header id="bar" hidden></header>
 <main id="stage"></main>
@@ -145,7 +156,9 @@ const beep=(f,d=.12,t="sine")=>{if(!S.snd)return;try{AC=AC||new(window.AudioCont
 const shake=()=>{if(RM)return;stage.classList.remove("sh");void stage.offsetWidth;stage.classList.add("sh")};
 function msg(t,k){const e=$("#msg");if(!e)return;e.textContent=t;e.className="bub "+(k||"");if(k=="ok")beep(660);if(k=="bad"){beep(160,.2,"sawtooth");shake()}}
 const bt=(l,f,c,host)=>{const b=h("button",c||"",l);b.onclick=f;$(host||"#acts").append(b);return b};
-function scr(ch,html,bar_){stop();document.body.dataset.ch=ch;stage.className="";stage.innerHTML=html;if(!bar_)cur=-1;bar(!!bar_);scrollTo(0,0)}
+let pending=new Set();
+function later(fn,delay){const id=setTimeout(()=>{pending.delete(id);fn()},delay);pending.add(id);return id}
+function scr(ch,html,bar_){pending.forEach(clearTimeout);pending.clear();stop();document.body.dataset.ch=ch;stage.className="";stage.innerHTML=html;if(!bar_)cur=-1;bar(!!bar_);scrollTo(0,0)}
 function bar(on){const b=$("#bar");b.hidden=!on;if(!on)return;const m=M[cur],fu=M.findIndex(x=>!S.done[x.id]);
 b.innerHTML=`<button id="bk" aria-label="Назад" ${cur?"":"disabled"}>‹</button><div class="lab"><small>Глава ${m.ch}</small>${m.id}. ${m.t}</div><span id="tm"></span><b class="scr">${score()}/15</b><button id="ps" aria-label="Меню">⏸</button><div class="dots">${M.map((x,i)=>`<button class="dot${S.done[x.id]?" d":""}${i==cur?" c":""}" ${i<=fu||fu<0||S.done[x.id]?"":"disabled"} data-i="${i}" aria-label="Миссия ${x.id}"></button>`).join("")}</div>`;
 $$(".dot",b).forEach(d=>d.onclick=()=>open(+d.dataset.i));$("#bk").onclick=()=>open(cur-1);$("#ps").onclick=pause}
@@ -161,14 +174,14 @@ function next(id){id==5?sChap(2):id==10?sPaper():id==15?sEnd():open(id)}
 function engA(m){const n=m.slots,seq=Array(n).fill(null),cols=n+2;G.seq=seq;
 $("#play").innerHTML=`<div class="lane" id="lane" style="--c:${cols}"><div class="ln">ВХОД<br>📨</div>${seq.map((_,j)=>`<div class="slot" data-j="${j}" tabindex="0" role="button" aria-label="Слот ${j+1}"></div>`).join("")}<div class="ln">СЕРВЕР<div id="sv">${srv(70)}</div></div><div class="rqs" id="rqs"></div></div><div class="pal" id="pal"></div><p class="leg">Перетащи блок на слот или нажми на блок. Нажми на блок в дорожке, чтобы убрать. <span style="color:#58b6ff">●</span> покупатель <span style="color:#ff4d55">●</span> атака <span style="color:#ffa63d">●</span> бот <span style="color:#d46bff">●</span> эксплойт</p>`;
 const paint=()=>$$(".slot").forEach((s,j)=>{const b=seq[j];s.innerHTML=b?`<div><b>${BL[b][1]}</b><br>${BL[b][0]}</div>`:"перетащи блок";s.classList.toggle("f",!!b)});
-$$(".slot").forEach((s,j)=>{const clr=()=>{if(!G.run){seq[j]=null;paint()}};s.onclick=clr;s.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();clr()}};s.ondragover=e=>e.preventDefault();s.ondrop=e=>{e.preventDefault();if(!G.run){seq[j]=e.dataTransfer.getData("text");paint()}}});
+$$(".slot").forEach((s,j)=>{const clr=()=>{if(!G.run){seq[j]=null;paint()}};s.onclick=clr;s.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();clr()}};s.ondragover=e=>e.preventDefault();s.ondrop=e=>{e.preventDefault();if(!G.run){const id=e.dataTransfer.getData("text");if(m.pal.includes(id)){seq[j]=id;paint()}}}});
 m.pal.forEach(id=>{const c=h("button","chip",BL[id][1]+" "+BL[id][0]);c.draggable=true;c.ondragstart=e=>e.dataTransfer.setData("text",id);c.onclick=()=>{if(G.run)return;const j=seq.indexOf(null);if(j<0)return msg("Все слоты заняты. Нажми на блок в дорожке, чтобы убрать его.","warn");seq[j]=id;paint()};$("#pal").append(c)});paint();
 bt("Запустить проверку",()=>runA(m),"cta")}
 function runA(m){if(G.over||G.run)return;const seq=G.seq,n=m.slots,cols=n+2;if(!seq.some(Boolean))return msg("Дорожка пуста: добавь блоки между входом и сервером.","warn");
 G.run=1;const res=flow(m,seq);$$(".rq").forEach(e=>e.remove());
 res.forEach((r,i)=>{const d=h("i","rq k"+r.k);d.style.top=(10+(i%6)*20)+"px";$("#rqs").append(d);const c0=.5/cols*100,tc=(r.stop<0?n+1.5:r.stop+1.5)/cols*100;
 d.animate([{left:c0+"%",opacity:1,transform:"scale(1)"},{left:tc+"%",opacity:1,transform:"scale(1)",offset:.75},{left:tc+"%",opacity:0,transform:r.stop<0?"scale(1)":"scale(2.6)"}],{duration:RM?400:2200,delay:RM?0:i*150,fill:"both"})});
-setTimeout(()=>{G.run=0;const lk=res.filter(r=>r.stop<0&&r.k!="h").length,ls=res.filter(r=>r.stop>=0&&r.k=="h").length,miss=(m.need||[]).filter(b=>!seq.includes(b));
+later(()=>{G.run=0;const lk=res.filter(r=>r.stop<0&&r.k!="h").length,ls=res.filter(r=>r.stop>=0&&r.k=="h").length,miss=(m.need||[]).filter(b=>!seq.includes(b));
 $("#sv").innerHTML=srv(Math.max(5,100-lk*18-ls*5));
 if(lk&&ls>m.maxLost)msg("Угрозы прошли, а покупатели отсеялись. Порядок блоков важен.","bad");
 else if(lk)msg("Подозрительные запросы дошли до сервера ("+lk+"). Добавь или переставь блоки.","bad");
@@ -183,13 +196,13 @@ const draw=()=>{const bl=$("#bl");bl.innerHTML="";s.it.forEach((it,i)=>{const b=
 b.onclick=()=>{if(G.over)return;if(iso.has(i)){iso.delete(i);msg("Объект возвращён из карантина.","warn")}else sel.has(i)?sel.delete(i):sel.add(i);$("#det").innerHTML="<b>"+it[0]+"</b><br>"+it[1];draw()};bl.append(b)});
 const v=hp();$("#srvb").innerHTML=`${srv(v)}<div><b>${v}%</b><br><small>${v>=75?"Работает стабильно":v>=40?"Предупреждение":"Критично"}</small></div>`},
 rep=()=>{const kp=[...iso].filter(i=>s.it[i][2]!=1);if(kp.length)msg(s.km.replace("%n",s.it[kp[0]][0]),"bad");else if(iso.size)msg(s.tm,"ok");draw()};
-$("#zone").ondragover=e=>e.preventDefault();$("#zone").ondrop=e=>{e.preventDefault();if(G.over)return;iso.add(+e.dataTransfer.getData("text"));sel.clear();rep()};
+$("#zone").ondragover=e=>e.preventDefault();$("#zone").ondrop=e=>{e.preventDefault();if(G.over)return;const raw=e.dataTransfer.getData("text"),i=Number(raw);if(raw!==""&&Number.isInteger(i)&&i>=0&&i<s.it.length){iso.add(i);sel.clear();rep()}};
 bt(s.act,()=>{if(G.over)return;if(!sel.size)return msg("Сначала выбери объект.","warn");sel.forEach(i=>iso.add(i));sel.clear();rep()},"cta","#ba");
 bt(s.sc,()=>{if(G.over)return;const tg=s.it.map((x,i)=>x[2]==1?i:-1).filter(i=>i>=0),miss=tg.filter(i=>!iso.has(i)),kp=[...iso].filter(i=>s.it[i][2]!=1);
-$("#bl").classList.add("scan");setTimeout(()=>{$("#bl").classList.remove("scan");
+$("#bl").classList.add("scan");later(()=>{$("#bl").classList.remove("scan");
 if(kp.length)return msg(s.km.replace("%n",s.it[kp[0]][0])+" Нажми на него в списке, чтобы вернуть.","bad");
 if(miss.length)return msg("Скан: угроза активна. Не изолировано объектов: "+miss.length+".","warn");
-if(G.si<m.st.length-1){msg(s.ok,"ok");G.si++;setTimeout(()=>stB(m),900)}else win(m)},RM?0:700)},"","#ba");
+if(G.si<m.st.length-1){msg(s.ok,"ok");G.si++;later(()=>stB(m),900)}else win(m)},RM?0:700)},"","#ba");
 msg(s.i,"");draw()}
 /* ENGINE C: настройка параметров */
 function engC(m){const v=m.p.map(p=>p[3]);G.hold=0;
@@ -211,11 +224,12 @@ m.A.forEach(a=>{const b=h("button","ab",a[1]+(m.res?` <em>${a[2]}</em>`:""));b.o
 if(m.nd)nodes.forEach(([k])=>{$("#n_"+k).onclick=()=>act(m.nd[k])});
 up();timer=setInterval(()=>{if(G.over||G.pz)return;if(m.time){G.t--;showT()}m.tick&&m.tick(F);up();const l=m.lose&&m.lose(F);if(l)return lose(l);if(m.time&&G.t<=0)lose("Время вышло: кризис не остановлен.")},1000)}
 /* ЭКРАНЫ */
-function sIntro(){scr("0",`<section class="intro"><h1>КИБЕРКРИЗИС:<br>ПОСЛЕДНЯЯ ЛИНИЯ ЗАЩИТЫ</h1><p class="lead">Вы входите в интерактивный кибер-кризис: управляйте системами, от которых зависит цифровой мир.</p>
-<div class="vw" id="vw"><!-- Путь к фильму можно заменить в src --><video id="v" preload="metadata" playsinline><source src="gemini_generated_video_fd3029b2.mp4" type="video/mp4"></video><div class="vf" id="vf" hidden><div>Фильм не найден: gemini_generated_video_fd3029b2.mp4<br>Положите видео по этому пути. Игра работает и без него.</div></div><button class="pp" id="pp" aria-label="Воспроизвести">▶</button><input id="pb" type="range" min="0" max="100" step="0.1" value="0" aria-label="Перемотка"></div>
-<button class="cta" id="nx0">Далее</button></section>`);
+function sIntro(){scr("0",`<section class="intro"><div class="eyebrow"><span>CYBER RESILIENCE / BLACK OCTOBER</span><span>УЧЕБНЫЙ СИМУЛЯТОР</span></div><h1>КИБЕРКРИЗИС:<br>ПОСЛЕДНЯЯ ЛИНИЯ ЗАЩИТЫ</h1><p class="lead">Вы входите в интерактивный кибер-кризис: управляйте системами, от которых зависит цифровой мир.</p>
+<div class="vw" id="vw"><!-- Путь к фильму можно заменить в src --><video id="v" preload="metadata" playsinline controls><source src="gemini_generated_video_fd3029b2.mp4" type="video/mp4"></video><div class="vf" id="vf" hidden><div>Видео временно недоступно. Вы можете сразу начать миссии.</div></div><button class="pp" id="pp" aria-label="Воспроизвести">▶</button><input hidden id="pb" type="range" min="0" max="100" step="0.1" value="0" aria-label="Перемотка"></div>
+<div class="intro-footer"><button class="cta" id="nx0">Начать миссии →</button><small>15 МИССИЙ · 3 ГЛАВЫ · СЕРТИФИКАТ</small>${score()?'<button class="gh" id="continue">Продолжить игру</button>':''}</div></section>`);
+if($("#continue"))$("#continue").onclick=()=>{$("#v").pause();resume()};
 const v=$("#v"),nf=()=>{$("#vf").hidden=false;$("#pp").hidden=true;$("#pb").hidden=true};v.addEventListener("error",nf);v.querySelector("source").addEventListener("error",nf);
-$("#pp").onclick=()=>{if(v.paused){const p=v.play();p&&p.catch(nf)}else v.pause()};v.onplay=()=>$("#pp").style.opacity=0;v.onpause=()=>{$("#pp").style.opacity=.85;$("#pp").textContent="▶"};v.onclick=()=>$("#pp").click();
+$("#pp").onclick=()=>{if(v.paused){const p=v.play();p&&p.catch(nf)}else v.pause()};v.onplay=()=>$("#pp").hidden=true;v.onpause=()=>{$("#pp").hidden=false;$("#pp").style.opacity=.85;$("#pp").textContent="▶"};v.onclick=()=>$("#pp").click();
 v.ontimeupdate=()=>{$("#pb").value=v.duration?v.currentTime/v.duration*100:0};$("#pb").oninput=()=>{if(v.duration)v.currentTime=$("#pb").value/100*v.duration};$("#nx0").onclick=()=>{v.pause();sNews()}}
 const ILL=[`<svg viewBox="0 0 400 180"><rect width="400" height="180" fill="#0d2147"/>${[0,1,2,3,4,5,6].map(i=>`<rect x="${30+i*52}" y="${150-i*18-10}" width="34" height="${i*18+10}" fill="${i>4?"#ff9a3c":"#3cc8f0"}"/>`).join("")}</svg>`,`<svg viewBox="0 0 400 180"><rect width="400" height="180" fill="#0d2147"/><rect x="60" y="90" width="80" height="50" fill="#2a4a85"/><rect x="160" y="90" width="80" height="50" fill="#2a4a85"/><rect x="260" y="90" width="80" height="50" fill="#2a4a85"/><rect x="160" y="30" width="80" height="50" fill="#e5484d"/><path d="M100 90V80H200V80M300 90V80H200" stroke="#ff9a3c" stroke-width="3" fill="none"/></svg>`,`<svg viewBox="0 0 400 180"><rect width="400" height="180" fill="#0d2147"/><ellipse cx="200" cy="100" rx="110" ry="46" fill="#33518f"/><circle cx="150" cy="80" r="40" fill="#33518f"/><circle cx="230" cy="70" r="46" fill="#33518f"/><path d="M200 60l22 40h-44z" fill="#ff9a3c"/></svg>`,`<svg viewBox="0 0 400 180"><rect width="400" height="180" fill="#0d2147"/><path d="M200 20l70 25v50c0 40-30 62-70 75-40-13-70-35-70-75V45z" fill="#2a4a85" stroke="#3cc8f0" stroke-width="4"/><circle cx="215" cy="85" r="20" fill="none" stroke="#ff9a3c" stroke-width="5"/><path d="M230 100l24 24" stroke="#ff9a3c" stroke-width="5"/></svg>`];
 const NW=[["Black Friday: нагрузка на интернет-инфраструктуру резко растёт","Крупные магазины сообщают о четырёхкратном росте запросов. Серверы работают на пределе.","КРИТИЧНОСТЬ 4/10","m"],["PHP-приложения: обнаружена проблема в общей зависимости","Несколько приложений используют одну устаревшую библиотеку, и в ней найден дефект.","КРИТИЧНОСТЬ 6/10","m"],["Облачные сервисы: несколько систем демонстрируют признаки нестабильности","Очереди заданий растут, базы данных отвечают всё медленнее.","КРИТИЧНОСТЬ 7/10",""],["Специалистам по кибербезопасности поручено расследование","Команде нужен администратор, который соберёт защиту. Эта работа поручена вам.","КРИТИЧНОСТЬ 8/10",""]];

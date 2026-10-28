@@ -1,0 +1,7 @@
+[build]
+  publish = "."
+
+[[redirects]]
+  from = "/"
+  to = "/Cyber.Resilience.Black.October.1.html"
+  status = 200
