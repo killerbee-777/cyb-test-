@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Cyber Resilience — Black October</title>
+<style>
+:root{--bg:#070d1c;--pn:#0f1a30;--ln:#243a63;--tx:#e6eeff;--mt:#93a8cf;--ac:#3cc8f0;--ac2:#ff9a3c;--rd:#e5484d;--ok:#3cc8a0;--am:#f0a93c;--r:12px;color-scheme:dark;box-sizing:border-box;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+*,*::before,*::after{box-sizing:inherit}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:17px/1.5 system-ui,"Segoe UI",Roboto,sans-serif;min-height:100vh;transition:background .6s}
+body[data-ch="0"],body[data-ch="e"]{background:radial-gradient(900px 500px at 70% -10%,#17356b,transparent),#070d1c}
+body[data-ch="1"]{--bg:#133e82;--pn:#ffffff1f;--ln:#ffffff40;--ac:#ffb347;--mt:#cfe0ff;--r:24px;background:linear-gradient(165deg,#1a56ad,#112f6a)}
+body[data-ch="2"]{--bg:#070c16;--pn:#0e1a2e;--r:8px;background:#070c16}
+body[data-ch="3"]{--bg:#12060a;--pn:#241017;--ln:#5a2230;--ac:#ff5a4d;--r:6px;background:radial-gradient(900px 500px at 50% 110%,#4a0f1a,transparent),#12060a}
+body[data-ch="p"]{background:#e8e0cc;color:#17140f}
+button,input{font:inherit;color:inherit}
+button{background:var(--pn);border:1px solid var(--ln);border-radius:var(--r);padding:10px 14px;cursor:pointer}
+button:hover:not(:disabled){border-color:var(--ac)}button:disabled{opacity:.4;cursor:default}
+:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+.cta{background:var(--ac);color:#04121f;border:0;font-weight:800;letter-spacing:.04em;padding:14px 26px;font-size:18px}
+body[data-ch="3"] .cta{color:#fff}.gh{background:none}
+#bar{position:sticky;top:0;z-index:5;display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 14px;background:#050a14d9;backdrop-filter:blur(8px);border-bottom:1px solid var(--ln)}
+#bar button{padding:4px 10px}.lab{flex:1;min-width:140px;font-size:15px}.lab small{color:var(--ac);text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
+.dots{display:flex;gap:4px;order:5;width:100%;justify-content:center}
+.dot{width:14px;height:14px;padding:0;border-radius:50%;background:#ffffff22}.dot:nth-child(5n+1){margin-left:10px}.dot.d{background:var(--ok)}.dot.c{outline:2px solid var(--ac2)}
+#tm{font-weight:800;color:var(--ac2)}.scr{color:var(--ac)}
+main{max-width:980px;margin:0 auto;padding:16px}
+.sh{animation:sh .35s}@keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.alarm{animation:al 1.6s infinite}@keyframes al{50%{box-shadow:inset 0 0 90px #e5484d55}}
+h1{font-size:clamp(26px,5vw,44px);line-height:1.1;margin:6px 0;letter-spacing:.02em}.lead{color:var(--mt);margin:0 0 14px}
+.intro{text-align:center}.vw{position:relative;aspect-ratio:16/9;background:#02050b;border:1px solid var(--ln);border-radius:16px;overflow:hidden;margin-bottom:16px}
+.vw video{width:100%;height:100%;object-fit:cover}.vf{position:absolute;inset:0;display:grid;place-items:center;padding:24px;background:linear-gradient(135deg,#0b1d44,#050912);color:var(--mt)}
+.pp{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:72px;height:72px;border-radius:50%;font-size:26px;background:#0009;opacity:.85}
+#pb{position:absolute;left:0;right:0;bottom:0;width:100%;margin:0;height:14px;accent-color:var(--ac)}
+.news{text-align:center}.vp{overflow:hidden;border-radius:20px}.trk{display:flex;transition:transform .4s;touch-action:pan-y;user-select:none}
+.nc{flex:0 0 100%;padding:0 4px}.nc article{background:linear-gradient(180deg,#14284f,#0c1730);border:1px solid var(--ln);border-radius:20px;overflow:hidden;text-align:left}
+.nc svg{display:block;width:100%;height:auto;max-height:240px}.nc .tx{padding:16px 20px 20px}.nc h2{font:700 clamp(21px,3.6vw,30px)/1.2 Georgia,serif;margin:6px 0}.nc p{margin:6px 0;color:#c4d3f2}
+.sev{display:inline-block;font-size:12px;letter-spacing:.1em;padding:2px 10px;border-radius:99px;background:#e5484d33;color:#ff8d90}.sev.m{background:#f0a93c33;color:#ffc66e}
+.nav{display:flex;gap:12px;justify-content:center;align-items:center;margin:14px 0}
+.ms{display:grid;gap:12px}.guide{display:flex;gap:12px;align-items:center}.bot{flex:none}body:not([data-ch="1"]) .bot{display:none}
+.bub{flex:1;background:var(--pn);border:1px solid var(--ln);border-radius:var(--r);padding:10px 14px;min-height:56px}.bub.ok{border-color:var(--ok);background:#3cc8a022}.bub.bad{border-color:var(--rd);background:#e5484d22}.bub.warn{border-color:var(--am)}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+.lane{position:relative;display:grid;grid-template-columns:repeat(var(--c),1fr);gap:6px;align-items:center;min-height:150px;background:var(--pn);border:1px solid var(--ln);border-radius:var(--r);padding:8px}
+.ln{text-align:center;font-size:13px;color:var(--mt)}
+.slot{min-height:84px;border:2px dashed var(--ac);border-radius:var(--r);display:grid;place-items:center;text-align:center;font-size:12px;padding:4px;cursor:pointer;color:var(--mt)}.slot.f{border-style:solid;background:#ffffff14;color:var(--tx)}.slot b{font-size:26px}
+.rqs{position:absolute;inset:0;pointer-events:none;overflow:hidden}.rq{position:absolute;width:12px;height:12px;border-radius:50%;left:0}
+.kh{background:#58b6ff}.ka{background:#ff4d55}.kb{background:#ffa63d}.kx{background:#d46bff}
+.leg{font-size:13px;color:var(--mt)}.pal{display:flex;gap:8px;flex-wrap:wrap}.chip{cursor:grab}
+.bwrap{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}@media(max-width:700px){.bwrap{grid-template-columns:1fr}.dots{gap:3px}}
+.bl{display:grid;gap:6px;align-content:start}.itm{text-align:left;font:15px ui-monospace,Consolas,monospace}.itm.s{border-color:var(--ac2);background:#ff9a3c22}.itm.q{opacity:.5;text-decoration:line-through}.itm em{font-size:11px;color:var(--am)}
+.bl.scan{animation:sc .7s}@keyframes sc{50%{box-shadow:inset 0 0 40px var(--ac)}}
+.srvb{display:flex;gap:12px;align-items:center;background:var(--pn);border:1px solid var(--ln);border-radius:var(--r);padding:10px}.srvb b{font-size:24px}
+.zone{margin:10px 0;padding:14px;border:2px dashed var(--rd);border-radius:var(--r);text-align:center;color:var(--mt);font-size:14px}
+.det{background:var(--pn);border:1px dashed var(--ln);border-radius:var(--r);padding:10px;min-height:70px;font-size:15px}
+.sl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;margin:10px 0}.sl input{grid-column:1/3;accent-color:var(--ac)}
+.mets{display:grid;gap:8px;margin:10px 0}.met{position:relative;background:var(--pn);border:1px solid var(--ln);border-radius:var(--r);padding:8px 12px;display:flex;justify-content:space-between;overflow:hidden}
+.met i{position:absolute;left:0;bottom:0;height:4px;transition:width .4s}.met.g i{background:var(--ok)}.met.b i{background:var(--rd)}.met span,.met b{position:relative}
+.dots2,#dots{display:grid;grid-template-columns:repeat(10,1fr);gap:6px;margin:10px 0}.dt{aspect-ratio:1;border-radius:50%;transition:.3s}.dt.h{background:#58b6ff}.dt.a{background:#ff4d55}.dt.x{opacity:.2;transform:scale(.6)}
+.ops{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}@media(max-width:700px){.ops{grid-template-columns:1fr}}
+.nds{display:grid;grid-template-columns:1fr 1fr;gap:10px}.nd{padding:16px;text-align:left;border-width:2px}.nd small{display:block;color:var(--mt)}.nd b{font-size:26px}
+.nd.g{border-color:var(--ok)}.nd.a{border-color:var(--am);background:#f0a93c1f}.nd.r{border-color:var(--rd);background:#e5484d2a;animation:pl 1.2s infinite}@keyframes pl{50%{opacity:.7}}
+.tick{font:800 22px ui-monospace,monospace;color:var(--ok);padding:6px 12px;background:var(--pn);border-radius:var(--r)}.tick.dn{color:var(--rd)}
+.al{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:12px}.ab{text-align:left}.ab em{float:right;font-style:normal;color:var(--ac2)}
+.modal{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#000b;padding:16px}.modal .card{background:#0e1a33;color:var(--tx);border:1px solid var(--ac);border-radius:20px;padding:22px;max-width:520px;width:100%;animation:pop .3s}
+@keyframes pop{from{transform:scale(.9);opacity:0}}.card dt{color:var(--ac);font-size:13px;text-transform:uppercase;margin-top:8px}.card dd{margin:0}.pt{color:var(--ac2);font-weight:700}
+.cf{position:fixed;top:-14px;width:9px;height:14px;z-index:30;animation:fl 2.2s ease-in forwards}@keyframes fl{to{transform:translateY(110vh) rotate(540deg)}}
+.chap{text-align:center;padding:40px 0}.chap h1{font-size:clamp(30px,6vw,54px)}
+.paper{max-width:900px;margin:0 auto;font-family:Georgia,serif}.mast{border-bottom:4px double #17140f;text-align:center;letter-spacing:.3em;font-size:14px;padding-bottom:6px}
+.paper h1{font-size:clamp(30px,6vw,56px);text-transform:uppercase;margin:12px 0}.sevx{background:#a3141b;color:#fff;padding:12px;text-align:center;font:800 clamp(20px,4vw,30px) system-ui}.sevx small{display:block;font:12px system-ui;opacity:.85}
+.pg{display:grid;grid-template-columns:1.4fr 1fr;gap:18px;margin:14px 0}@media(max-width:700px){.pg{grid-template-columns:1fr}}
+.paper svg{width:100%;height:auto;border:2px solid #17140f}.tl{list-style:none;padding:0;border-left:3px solid #a3141b}.tl li{margin:6px 0 6px 10px}.stat{display:flex;gap:12px;flex-wrap:wrap}.stat div{flex:1;background:#17140f;color:#fff;padding:8px 12px;text-align:center;font-family:system-ui}.stat b{display:block;font-size:30px;color:#ff6b6b}
+.cert{margin:14px auto;max-width:820px;padding:36px 26px;text-align:center;border:2px solid #d9b45c;border-radius:6px;background:repeating-linear-gradient(45deg,#ffffff06 0 1px,transparent 1px 14px),linear-gradient(160deg,#0b1a38,#050a16);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cert h2{letter-spacing:.14em;font-size:clamp(16px,3vw,24px);margin:0}.cert .a{color:#d9b45c;font-weight:700;letter-spacing:.1em}.cert h3{font-size:clamp(22px,4.5vw,36px);margin:14px 0;border-bottom:1px solid var(--ln);display:inline-block;padding:0 24px}.cert p{color:#b9c9e8;font-size:15px}.cert small{color:var(--mt)}
+.ring{width:120px;height:120px;border-radius:50%;border:4px solid var(--ok);margin:10px auto;display:grid;place-items:center;font-size:44px;animation:rg 2s infinite}@keyframes rg{50%{box-shadow:0 0 40px var(--ok)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.cf{display:none}}
+@media print{body *{visibility:hidden}.cert,.cert *{visibility:visible}.cert{position:absolute;left:0;top:0;width:100%;margin:0}}
+</style></head><body>
+<header id="bar" hidden></header>
+<main id="stage"></main>
+<script>
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const h=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.innerHTML=x;return e};
+const RM=matchMedia("(prefers-reduced-motion:reduce)").matches,cl=v=>Math.max(0,Math.min(100,Math.round(v))),pn=(F,n)=>F.pen=(F.pen||0)+n;
+const srv=hp=>{const c=hp>=75?"#3cc8a0":hp>=40?"#f0a93c":"#e5484d";return`<svg viewBox="0 0 60 56" width="56" aria-hidden="true"><rect x="6" y="4" width="48" height="48" rx="6" fill="#0b1426" stroke="${c}" stroke-width="2"/>${[0,1,2].map(i=>`<rect x="12" y="${10+i*14}" width="36" height="9" rx="2" fill="#1b2a48"/><circle cx="42" cy="${14.5+i*14}" r="2.6" fill="${c}"/>`).join("")}</svg>`};
+/*DATA*/
+const BL={fw:["Фильтр трафика","🛡️"],ana:["Анализ шаблонов","🔍"],cnt:["Счётчик запросов","🔢"],rate:["Лимит запросов","⏱️"],cap:["CAPTCHA","🧩"],beh:["Поведенческая проверка","🧠"],res:["Ограничить подозрительных","🚫"],integ:["Целостность приложения","🧱"],mon:["Мониторинг здоровья","💓"],pass:["Пропустить всё","➡️"]};
+function flow(m,seq){let hn=0;return m.req.split("").map(k=>{const hi=k=="h"?hn++:0;let an=0,stop=-1;
+for(let j=0;j<seq.length&&stop<0;j++){const b=seq[j];if(!b)continue;
+if(b=="fw"&&k=="a")stop=j;else if(b=="integ"&&k=="x")stop=j;
+else if(b=="ana"||b=="cnt"||b=="beh")an=1;
+else if(b=="rate"){if(k=="b"||(k=="h"&&hi%4==3))stop=j}
+else if(b=="cap"){if(an?k=="b":(k=="h"&&hi%3==2))stop=j}
+else if(b=="res"&&an&&k=="b")stop=j}
+return{k,stop}})}
+const pnl=(...a)=>a;
+const RA=[
+["iso","Изолировать уязвимые экземпляры",2,F=>(F.iso=1,["Уязвимые узлы выведены из трафика. Здоровые продолжают работать.","ok"])],
+["ver","Проверить происхождение патча",1,F=>(F.ver=1,["Патч подписан и собран из проверенного источника.","ok"])],
+["pat","Развернуть патч",2,F=>{if(!F.ver){pn(F,15);return["Непроверенный патч не прошёл проверку: развёртывание отклонено.","bad"]}if(!F.iso){pn(F,10);return["Патч поверх живых уязвимых узлов вызвал сбои. Сначала изолируйте их.","bad"]}F.patch=1;return["Патч развёрнут на изолированных узлах.","ok"]}],
+["val","Проверить обновлённое приложение",1,F=>F.patch?(F.val=1,["Патч проверен. Можно переходить к постепенному развёртыванию.","ok"]):["Проверять пока нечего: патч не развёрнут.","warn"]],
+["flt","Отфильтровать вредный трафик",1,F=>(F.flt=1,["Вредные запросы отсекаются, очередь разгружается.","ok"])],
+["syn","Синхронизировать реплику БД",2,F=>(F.syn=1,["Реплика БД синхронизирована.","ok"])],
+["dp","Восстановить зависимости сервисов",1,F=>F.syn?(F.dp=1,["Зависимости восстановлены в правильном порядке.","ok"]):["Реплика БД не синхронизирована. Зависимости пока нельзя безопасно поднять.","bad"]],
+["au","Проверить аутентификацию",1,F=>F.dp?(F.au=1,["Вход пользователей работает.","ok"]):["Сначала восстановите зависимости.","warn"]],
+["tr","Вернуть клиентский трафик (+50%)",1,F=>{if(!(F.val&&F.au&&F.flt)){pn(F,20);F.tr=0;return["Трафик вернулся слишком рано: сервисы перегружены.","bad"]}F.tr=Math.min(100,(F.tr||0)+50);return[F.tr<100?"Половина клиентов вернулась. Следим за нагрузкой.":"Все клиенты вернулись: заказы оформляются.","ok"]}],
+["mon","Подтвердить мониторингом",1,F=>F.tr>=100?(F.mon=1,["Мониторинг подтверждает восстановление.","ok"]):["Подтверждать нечего: трафик ещё не восстановлен.","warn"]]];
+const VR=F=>{const p=F.pen||0,t=F.tr||0,q=F.q??55;return{web:cl(18+(F.iso?12:0)+(F.val?25:0)+(F.flt?10:0)+t*.3-p-(q>85?15:0)),db:cl(30+(F.syn?65:0)-p/2),auth:cl(35+(F.dp?20:0)+(F.au?40:0)),pay:cl(15+(F.au?25:0)+(F.syn?15:0)+t*.35-p/2),q:cl(q),heat:cl(30+(F.iso?0:25)+q*.3)}};
+const ND={web:"iso",db:"syn",auth:"au",pay:"tr"};
+const M=[
+{ch:1,ty:"A",t:"Первый фильтр",g:"Привет! Я Бит. Перетащи «Фильтр трафика» на дорожку между входом и сервером, потом нажми «Запустить».",slots:1,pal:["fw","pass"],req:"hhahhahhhah",maxLost:0,d:["Фильтр остановил вредные запросы, а покупатели дошли до сервера.","Блок стоял на пути всех запросов.","Защита начинается с контроля входящего трафика."]},
+{ch:1,ty:"A",t:"Останови ботов",g:"Боты выглядят как покупатели. Сначала проанализируй запросы, потом решай, кого ограничить.",slots:3,pal:["ana","beh","cap","res","pass"],req:"hbhhbhbhhbhhbh",maxLost:1,d:["Боты остановлены, живые покупатели прошли.","Анализ пометил ботов, и только их проверили или ограничили.","Порядок проверок важен: CAPTCHA без анализа мешает всем."]},
+{ch:1,ty:"A",t:"Умный фильтр",g:"Жёсткий лимит ударит и по покупателям. Собери фильтр, который умеет отличать.",slots:3,pal:["cnt","rate","ana","res","pass"],req:"hhbhhhbhhbhhhbhh",maxLost:1,d:["Поток разделился на честный и подозрительный.","Счётчик или анализ выделили потоки, а ограничение коснулось только их.","Точное выделение лучше грубого запрета."]},
+{ch:1,ty:"B",t:"Почини PHP-приложение",g:"Приложение мигает предупреждением. Найди устаревший модуль, убери его и поставь проверенную замену.",st:[
+{i:"Найди устаревший модуль и убери его (нажми на карточку, затем кнопку).",it:[["Модуль корзины (libcart 2.1.4)","Версия 2.1.4: сопровождение прекращено, есть предупреждение безопасности.",1],["Модуль входа (libauth 4.0)","Актуален и проверен.",0],["Каталог товаров","Актуален.",0],["Шаблоны страниц","Актуальны.",0]],l0:65,rl:60,act:"Убрать выбранный модуль",sc:"Проверить приложение",tm:"Устаревший модуль снят: приложение больше не использует уязвимый код.",km:"Ты отключил рабочий модуль «%n». Верни его и найди устаревший.",ok:"Модуль снят. Теперь выбери безопасную замену."},
+{i:"Выбери проверенный пакет и запусти тест.",it:[["cart 2.1.9 · cart-labs ✓","Подпись действительна, сборка прослеживается.",1],["cart 2.2.0 · неизвестный издатель","Нет подписи и происхождения.",0],["cart 2.1.9-fix · форк","Источник не подтверждён, тесты не пройдены.",0]],l0:60,rl:55,act:"Установить выбранный пакет",sc:"Запустить тест",tm:"Проверенный пакет установлен.",km:"Пакет «%n» не прошёл проверку: ему нельзя доверять.",ok:""}],d:["Предупреждение исчезло: уязвимый модуль заменён проверенным.","Ты выбрал обновление по подписи и происхождению, а не по номеру версии.","Безопасность приложения равна безопасности его зависимостей."]},
+{ch:1,ty:"A",t:"Система защиты",g:"Финал лаборатории! Собери полную защиту из пяти блоков: фильтр, анализ, ограничение, целостность, мониторинг.",slots:5,pal:["fw","ana","cap","res","rate","integ","mon","pass"],req:"hhahbhxhhbhaxhhbhxhh",maxLost:1,need:["mon","integ"],d:["Атака разбилась о слои защиты: никто лишний не прошёл.","Каждый блок закрыл свой вид угрозы.","Защита работает как система слоёв, а не как один фильтр."]},
+{ch:2,ty:"B",t:"Найди заражённый процесс",g:"Сервер перегружен. Изучи дерево процессов и изолируй то, что ведёт себя странно.",st:[{i:"Нажимай на процессы и смотри детали. Изолируй подозрительные.",it:[["systemd","Системный менеджер. Норма.",0,0],["nginx","Веб-сервер. Нужен сервису.",0,1],["php-fpm: shop","Пул приложения магазина. Нужен.",0,1],["php-fpm: cart-merge  CPU 94%","Родитель неизвестен, запущен 3 минуты назад, массово шлёт запросы. Подозрительно.",1,2],["sh -c ./.cache/updater","Дочерний процесс cart-merge. Скрытый файл. Подозрительно.",1,3],["mysqld","База данных. Нужна.",0,1],["cron","Планировщик. Норма.",0,1]],l0:70,rl:40,act:"Изолировать выбранное",sc:"Проверочный скан",tm:"Процесс изолирован: нагрузка на сервер падает.",km:"Ты изолировал нужный процесс «%n». Сервис пострадал.",ok:""}],d:["Заражённая цепочка процессов изолирована, сервер ожил.","Ты смотрел на происхождение и поведение, а не только на нагрузку.","Сначала расследуй, потом изолируй."]},
+{ch:2,ty:"B",t:"Очисти сервер",g:"Отправь подозрительные файлы в карантин. Файлы приложения и сервисов трогать нельзя.",st:[{i:"Перетащи подозрительные файлы в карантин или выбери и нажми кнопку.",it:[["/var/www/shop/index.php","Основной файл магазина. Нужен.",0],["/var/www/shop/vendor/","Зависимости приложения. Нужны.",0],["/etc/nginx/nginx.conf","Настройки веб-сервера. Нужны.",0],["/var/www/shop/uploads/.tmp_x91.php","PHP-файл в папке загрузок, скрытый. Подозрительно.",1],["/tmp/.cache_upd","Скрытый исполняемый файл с неизвестным автором. Подозрительно.",1],["/var/spool/cron/.unk","Неизвестное задание планировщика. Подозрительно.",1],["/var/log/app.log","Журнал приложения. Нужен для расследования.",0]],l0:75,rl:25,act:"В карантин: выбранное",sc:"Сканирование",tm:"Файлы в карантине: сервер чище.",km:"Ты убрал нужный файл «%n». Верни его.",ok:""}],d:["Три подозрительных файла в карантине, приложение работает.","Ты отличил чужое от важного.","Карантин обратим, удаление нет: так безопаснее."]},
+{ch:2,ty:"C",t:"Останови атаку, не заблокировав всех",g:"Синие точки — покупатели, красные — подозрительные. Настрой правила так, чтобы красные отсеялись, а синие остались.",p:[["Строгость блокировки",0,100,70],["Проверка поведения (0 — выкл, 1 — вкл)",0,1,0]],dots:1,
+f:v=>{const H=30,A=10,ds=[];let hl=0,al=0;for(let i=0;i<H;i++){const b=5+i*1.5>=100-v[0];hl+=b;ds.push([0,b])}for(let i=0;i<A;i++){const b=40+i*5.5+(v[1]?25:0)>=100-v[0];al+=b;ds.push([1,b])}const lk=A-al;
+return{dots:ds,m:[["Покупатели обслужены",Math.round((H-hl)/H*100),"%",hl<=1],["Подозрительные остановлены",Math.round(al/A*100),"%",lk<=1]],win:hl<=1&&lk<=1,msg:hl>1?"Слишком строгое правило заблокировало настоящих покупателей.":lk>1?"Слишком мягкие правила: подозрительные запросы проходят."+(v[1]?"":" Включи проверку поведения."):""}},d:["Правила отсекли подозрительных и сохранили покупателей.","Проверка поведения разделила потоки, и грубая строгость стала не нужна.","Широкий запрет вредит своим."]},
+{ch:2,ty:"E",t:"Восстанови сервис безопасно",g:"Сервис лежит. Восстанови из бэкапа, проверь данные и только потом открывай клиентов.",init:()=>({}),V:F=>({web:F.ok?95:F.cr?5:12,db:F.bad?15:F.int?95:F.rs?70:30,auth:F.dep?90:55,pay:F.ok?92:F.dep?45:20}),
+A:[["chk","Проверить бэкап",0,F=>(F.bk=1,["Бэкап восстановим: контрольные суммы совпали.","ok"])],["rst","Восстановить из бэкапа",0,F=>{if(!F.bk){F.bad=1;return["Бэкап не проверен: данные повреждены. Нажми «Заново».","bad"]}F.rs=1;return["Данные восстановлены. Проверь их целостность.","ok"]}],["int","Проверить целостность данных",0,F=>!F.rs?["Пока нечего проверять.","warn"]:F.bad?["Целостность нарушена. Нажми «Заново».","bad"]:(F.int=1,["Данные целы: записи согласованы.","ok"])],["dep","Подключить зависимости",0,F=>(F.dep=1,["Вход и кеш подключены.","ok"])],["hc","Запустить health-проверку",0,F=>F.rs&&F.int&&F.dep&&!F.bad?(F.ok=1,["Проверка пройдена: приложение работает.","ok"]):["Проверка не пройдена: "+(!F.rs?"данные не восстановлены":!F.int?"целостность не проверена":"зависимости не подключены")+".","bad"]],["go","Пустить весь трафик сразу",0,F=>(F.cr=1,["Сервис упал под нагрузкой: данные не проверены.","bad"])]],win:F=>F.ok,d:["Сервис вернулся из проверенной копии.","Ты проверил бэкап, данные и зависимости до включения трафика.","Работающий сервер не значит целые данные."]},
+{ch:2,ty:"E",t:"Пределы привычной защиты",g:"Начался крупный сбой! Используй привычные меры и проследи за здоровьем сервисов.",time:45,init:()=>({h:75,stock:100}),V:F=>({web:cl(F.h),db:cl(F.h-5),auth:cl(F.h+5),pay:cl(F.h-10),q:cl(100-F.h)}),tick:F=>{F.h-=F.red?.9:1.5;F.stock=Math.max(0,F.stock-.35)},lose:F=>F.h<=0?"Сервисы упали: привычные меры не остановили каскад.":"",
+A:[["fw","Правило файрвола",0,F=>(F.fw=1,F.h+=8,["Часть подозрительного трафика остановлена, но сбои продолжаются.","warn"])],["rs","Перезапустить сервис",0,F=>(F.rs=1,F.h=Math.min(100,F.h+20),["Сервис перезапущен, но уязвимая зависимость осталась.","warn"])],["red","Снизить трафик",0,F=>(F.red=1,F.stock-=3,["Нагрузка ниже, часть покупателей ждёт. Причина сбоя на месте.","warn"])],["sc","Обычное сканирование",0,F=>(F.sc=1,["Известных сигнатур нет. Подозрительна общая зависимость libcart.","warn"])],["esc","Эскалировать: общая зависимость",0,F=>F.fw&&F.rs&&F.red&&F.sc?(F.esc=1,["Системная проблема подтверждена: одними привычными мерами её не решить.","ok"]):["Сначала попробуй все четыре привычные меры.","warn"]]],win:F=>F.esc,d:["Привычные меры помогли лишь частично, а сбой продолжился.","Причина была в общей зависимости, которую файрвол и перезапуск не лечат.","Традиционные меры нужны, но одних их мало."]},
+{ch:3,ty:"B",t:"Найди общую причину",g:"Несколько PHP-приложений падают одновременно. Найди общую библиотеку и изолируй только её.",st:[{i:"Изучи связи и изолируй общий источник сбоя.",it:[["shop-app","Использует libcart 2.1.4 и libauth. Сам здоров, но падает.",0],["admin-app","Использует libcart 2.1.4. Падает.",0],["payments-api","Использует libcart 2.1.4. Падает.",0],["libauth 4.0","Поддерживается, проверена.",0],["libcart 2.1.4 (общая)","Общая для трёх приложений, сопровождение прекращено, найдена вымышленная уязвимость CVE-SIM-2026-0001.",1],["MySQL 8","Не зависит от libcart.",0],["CDN-кеш","Не зависит от libcart. Отдаёт статику.",0]],l0:90,rl:70,act:"Изолировать выбранное",sc:"Проверить сеть",tm:"Общая библиотека изолирована: приложения перестали падать.",km:"Ты изолировал «%n»: это жертва, а не причина.",ok:""}],d:["Сбой в трёх приложениях сошёлся в одной библиотеке.","Ты искал общий знаменатель, а не лечил симптомы.","Общая зависимость — общий риск."]},
+{ch:3,ty:"C",t:"Переживи Чёрную пятницу",g:"Поток растёт! Настрой ёмкость и лимит так, чтобы покупатели прошли, а боты нет. Держи нужные показатели.",time:45,hold:3,p:[["Серверы приложения",2,40,8],["Кеширование, %",0,90,10],["Лимит вредного трафика, %",0,100,10],["Автомасштабирование (0 — нет, 1 — да)",0,1,0]],
+f:v=>{const cap=v[0]*40*(v[3]?1.5:1)*(1+v[1]/100*1.5),ab=600*(1-v[2]/100*.9),lp=1000*(1-Math.max(0,v[2]-70)*.015),dem=ab+lp,r=Math.min(1,cap/dem),sv=Math.round(lp*r/10),lat=Math.round(80+(dem>cap?900*(dem/cap-1):0)),cost=Math.round(v[0]*3+v[3]*20+v[1]*.4),win=sv>=90&&lat<=400&&cost<=100;
+return{m:[["Покупатели обслужены",sv,"%",sv>=90],["Вредные запросы отфильтрованы",Math.round(v[2]*.9),"%",v[2]>=30],["Задержка",lat,"мс",lat<=400,Math.min(100,lat/10)],["Доступность",Math.round(r*100),"%",r>=.9],["Условная стоимость",cost,"",cost<=100]],win,msg:v[2]>70?"Слишком строгий лимит режет покупателей.":sv<90?"Не хватает мощности: добавь серверы, кеш или автомасштаб.":lat>400?"Очереди растут.":"Выше бюджета."}},d:["Магазин выдержал пик и не потерял покупателей.","Кеш, масштабирование и точечный лимит вместе дали баланс.","Не «блокировать всё» и не «принимать всё»."]},
+{ch:3,ty:"E",t:"Защити платежи и данные",g:"Сайт оживает, но реплика БД отстаёт, а часть платежей зависла. Не открывай оплату раньше времени.",init:()=>({sy:40,stock:100}),V:F=>({web:72,db:F.sy>=100?(F.int?95:80):45,auth:85,pay:F.ok?95:F.er?8:15,sy:F.sy}),tick:F=>{F.stock=Math.min(100,F.stock+(F.er?-.4:0))},
+A:[["lag","Проверить отставание реплики",0,F=>["Реплика отстаёт: синхронизировано "+F.sy+"%. 12 платежей не завершены.","warn"]],["syn","Дождаться синхронизации",0,F=>(F.sy=100,["Реплика догнала основную базу.","ok"])],["rp","Выбрать проверенную точку восстановления",0,F=>(F.rp=1,["Точка восстановления проверена.","ok"])],["rec","Сверить незавершённые платежи",0,F=>F.rp?(F.rec=1,["12 платежей сверены: двойных списаний не будет.","ok"]):["Нужна проверенная точка восстановления, иначе платежи спишутся дважды.","bad"]],["int","Проверить целостность данных",0,F=>F.sy<100||!F.rec?["Реплика не синхронизирована или платежи не сверены.","bad"]:(F.int=1,["Целостность подтверждена.","ok"])],["op","Открыть оплату",0,F=>{if(F.sy<100||!F.rec||!F.int){F.er=1;F.stock=Math.max(0,F.stock-10);return["Реплика БД не синхронизирована. Платёжный сервис пока нельзя безопасно восстановить.","bad"]}F.er=0;F.ok=1;return["Оплата открыта после проверок: платежи проходят.","ok"]}]],win:F=>F.ok,d:["Оплата открылась только после проверок данных.","Синхронизация, сверка и целостность шли раньше платежей.","Доступность без целостности опаснее простоя."]},
+{ch:3,ty:"E",t:"Скоординируй восстановление",g:"Всё сломано сразу. Нажимай действия и узлы на карте: порядок решает. Каждая ошибка видна.",nd:ND,init:()=>({q:55}),V:VR,A:RA,tick:F=>{F.pen=Math.max(0,(F.pen||0)-1.5)},win:F=>F.mon&&F.tr>=100,d:["Узлы вернулись по одному, а трафик пришёл последним.","Изоляция, проверенный патч, данные и вход шли в правильном порядке.","Восстановление — это последовательность проверок."]},
+{ch:3,ty:"E",t:"Последняя линия защиты",g:"Финал! Время и ресурсы ограничены, курс падает. Не трать ресурсы зря: слепые меры не спасут.",time:100,res:15,nd:ND,init:()=>({q:55,stock:100,res:15}),V:VR,
+A:[...RA,["rs","Слепой перезапуск всех сервисов",2,F=>(F.q=Math.min(100,F.q+10),["Сервисы перезапущены, но уязвимая зависимость осталась.","warn"])],["ip","Заблокировать диапазон IP целиком",2,F=>(pn(F,12),["Блокировка задела настоящих покупателей.","bad"])],["un","Обновить production без тестов",2,F=>(pn(F,25),["Непроверенное обновление уронило часть сервисов.","bad"])]],
+tick:F=>{F.pen=Math.max(0,(F.pen||0)-1.5);const v=VR(F);F.q=cl(F.q+(F.flt?-2:1.5));F.stock=Math.min(100,F.stock+(v.web<60?-.5:v.web>=80?.3:0))},
+lose:F=>F.stock<=50?"Курс упал ниже критической отметки.":F.res<=0&&!(F.mon)?"Ресурсы реагирования исчерпаны.":"",
+win:F=>{const v=VR(F);return F.mon&&F.patch&&F.val&&F.tr>=100&&Math.min(v.web,v.db,v.auth,v.pay)>=70&&F.stock>50},d:["Уязвимое развёртывание снято, патч проверен, платежи и мониторинг в норме.","Ты расставил приоритеты и не тратил ресурсы на слепые меры.","Безопасность — скоординированная система: профилактика, обнаружение, сдерживание, восстановление и проверка."]}
+];
+M.forEach((m,i)=>m.id=i+1);
+/*END*/
+const KEY="cr-bo-v1";let S={done:{},name:"",cid:"",date:"",snd:1};
+try{const j=JSON.parse(localStorage.getItem(KEY));if(j&&j.done){S.name=j.name||"";S.cid=j.cid||"";S.date=j.date||"";S.snd=j.snd===0?0:1;Object.keys(j.done).forEach(k=>{if(M.some(m=>m.id==k))S.done[k]=1})}}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}},score=()=>Object.keys(S.done).length;
+const stage=$("#stage");let cur=-1,G={},timer=null,AC;
+const stop=()=>{clearInterval(timer);timer=null};
+const beep=(f,d=.12,t="sine")=>{if(!S.snd)return;try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t;o.frequency.value=f;g.gain.value=.05;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}};
+const shake=()=>{if(RM)return;stage.classList.remove("sh");void stage.offsetWidth;stage.classList.add("sh")};
+function msg(t,k){const e=$("#msg");if(!e)return;e.textContent=t;e.className="bub "+(k||"");if(k=="ok")beep(660);if(k=="bad"){beep(160,.2,"sawtooth");shake()}}
+const bt=(l,f,c,host)=>{const b=h("button",c||"",l);b.onclick=f;$(host||"#acts").append(b);return b};
+function scr(ch,html,bar_){stop();document.body.dataset.ch=ch;stage.className="";stage.innerHTML=html;if(!bar_)cur=-1;bar(!!bar_);scrollTo(0,0)}
+function bar(on){const b=$("#bar");b.hidden=!on;if(!on)return;const m=M[cur],fu=M.findIndex(x=>!S.done[x.id]);
+b.innerHTML=`<button id="bk" aria-label="Назад" ${cur?"":"disabled"}>‹</button><div class="lab"><small>Глава ${m.ch}</small>${m.id}. ${m.t}</div><span id="tm"></span><b class="scr">${score()}/15</b><button id="ps" aria-label="Меню">⏸</button><div class="dots">${M.map((x,i)=>`<button class="dot${S.done[x.id]?" d":""}${i==cur?" c":""}" ${i<=fu||fu<0||S.done[x.id]?"":"disabled"} data-i="${i}" aria-label="Миссия ${x.id}"></button>`).join("")}</div>`;
+$$(".dot",b).forEach(d=>d.onclick=()=>open(+d.dataset.i));$("#bk").onclick=()=>open(cur-1);$("#ps").onclick=pause}
+const showT=()=>{const t=$("#tm");if(t)t.textContent=G.t>=0&&M[cur].time?"⏱ "+G.t+" с":""};
+const BOT=`<svg class="bot" viewBox="0 0 70 70" width="64" aria-hidden="true"><line x1="35" y1="4" x2="35" y2="14" stroke="#ffb347" stroke-width="3"/><circle cx="35" cy="4" r="4" fill="#ffb347"/><rect x="10" y="14" width="50" height="44" rx="16" fill="#fff"/><circle cx="25" cy="34" r="6" fill="#133e82"/><circle cx="45" cy="34" r="6" fill="#133e82"/><path d="M24 46q11 8 22 0" stroke="#ff9a3c" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
+function open(i){cur=i;G={over:0,t:M[i].time||-1};const m=M[i];scr(m.ch,`<section class="ms"><div class="guide">${BOT}<div id="msg" class="bub" role="status" aria-live="polite">${m.g}</div></div><div id="play"></div><div id="acts" class="acts"></div></section>`,1);showT();({A:engA,B:engB,C:engC,E:engE}[m.ty])(m);bt("Заново",()=>open(i),"gh")}
+function lose(t){stop();G.over=1;msg(t+" Нажми «Заново», чтобы попробовать ещё раз.","bad")}
+function burst(){if(RM)return;for(let i=0;i<26;i++){const s=h("i","cf");s.style.cssText=`left:${Math.random()*100}vw;background:hsl(${Math.random()*360},85%,60%);animation-delay:${Math.random()*.4}s`;document.body.append(s);setTimeout(()=>s.remove(),2700)}}
+function win(m){stop();G.over=1;const f=!S.done[m.id];S.done[m.id]=1;save();bar(1);showT();beep(880,.25);burst();const d=m.d;
+const o=h("div","modal",`<div class="card" role="dialog" aria-label="Итоги миссии"><h2>Миссия ${m.id} пройдена ✓</h2><p class="pt">${f?"+1 балл":"Повтор: балл за эту миссию уже получен"}</p><dl><dt>Что произошло</dt><dd>${d[0]}</dd><dt>Почему получилось</dt><dd>${d[1]}</dd><dt>Принцип</dt><dd>${d[2]}</dd></dl><button class="cta" id="nx">Дальше</button></div>`);document.body.append(o);$("#nx").focus();$("#nx").onclick=()=>{o.remove();next(m.id)}}
+function next(id){id==5?sChap(2):id==10?sPaper():id==15?sEnd():open(id)}
+/* ENGINE A: сборка защиты с анимацией трафика */
+function engA(m){const n=m.slots,seq=Array(n).fill(null),cols=n+2;G.seq=seq;
+$("#play").innerHTML=`<div class="lane" id="lane" style="--c:${cols}"><div class="ln">ВХОД<br>📨</div>${seq.map((_,j)=>`<div class="slot" data-j="${j}" tabindex="0" role="button" aria-label="Слот ${j+1}"></div>`).join("")}<div class="ln">СЕРВЕР<div id="sv">${srv(70)}</div></div><div class="rqs" id="rqs"></div></div><div class="pal" id="pal"></div><p class="leg">Перетащи блок на слот или нажми на блок. Нажми на блок в дорожке, чтобы убрать. <span style="color:#58b6ff">●</span> покупатель <span style="color:#ff4d55">●</span> атака <span style="color:#ffa63d">●</span> бот <span style="color:#d46bff">●</span> эксплойт</p>`;
+const paint=()=>$$(".slot").forEach((s,j)=>{const b=seq[j];s.innerHTML=b?`<div><b>${BL[b][1]}</b><br>${BL[b][0]}</div>`:"перетащи блок";s.classList.toggle("f",!!b)});
+$$(".slot").forEach((s,j)=>{const clr=()=>{if(!G.run){seq[j]=null;paint()}};s.onclick=clr;s.onkeydown=e=>{if(e.key=="Enter"||e.key==" "){e.preventDefault();clr()}};s.ondragover=e=>e.preventDefault();s.ondrop=e=>{e.preventDefault();if(!G.run){seq[j]=e.dataTransfer.getData("text");paint()}}});
+m.pal.forEach(id=>{const c=h("button","chip",BL[id][1]+" "+BL[id][0]);c.draggable=true;c.ondragstart=e=>e.dataTransfer.setData("text",id);c.onclick=()=>{if(G.run)return;const j=seq.indexOf(null);if(j<0)return msg("Все слоты заняты. Нажми на блок в дорожке, чтобы убрать его.","warn");seq[j]=id;paint()};$("#pal").append(c)});paint();
+bt("Запустить проверку",()=>runA(m),"cta")}
+function runA(m){if(G.over||G.run)return;const seq=G.seq,n=m.slots,cols=n+2;if(!seq.some(Boolean))return msg("Дорожка пуста: добавь блоки между входом и сервером.","warn");
+G.run=1;const res=flow(m,seq);$$(".rq").forEach(e=>e.remove());
+res.forEach((r,i)=>{const d=h("i","rq k"+r.k);d.style.top=(10+(i%6)*20)+"px";$("#rqs").append(d);const c0=.5/cols*100,tc=(r.stop<0?n+1.5:r.stop+1.5)/cols*100;
+d.animate([{left:c0+"%",opacity:1,transform:"scale(1)"},{left:tc+"%",opacity:1,transform:"scale(1)",offset:.75},{left:tc+"%",opacity:0,transform:r.stop<0?"scale(1)":"scale(2.6)"}],{duration:RM?400:2200,delay:RM?0:i*150,fill:"both"})});
+setTimeout(()=>{G.run=0;const lk=res.filter(r=>r.stop<0&&r.k!="h").length,ls=res.filter(r=>r.stop>=0&&r.k=="h").length,miss=(m.need||[]).filter(b=>!seq.includes(b));
+$("#sv").innerHTML=srv(Math.max(5,100-lk*18-ls*5));
+if(lk&&ls>m.maxLost)msg("Угрозы прошли, а покупатели отсеялись. Порядок блоков важен.","bad");
+else if(lk)msg("Подозрительные запросы дошли до сервера ("+lk+"). Добавь или переставь блоки.","bad");
+else if(ls>m.maxLost)msg("Слишком строгое правило заблокировало настоящих покупателей ("+ls+").","bad");
+else if(miss.length)msg("Защита неполная: не хватает блока «"+BL[miss[0]][0]+"».","warn");
+else{msg("Фильтр работает: подозрительные запросы остановлены, покупатели обслужены.","ok");win(m)}},RM?500:res.length*150+2500)}
+/* ENGINE B: расследование и изоляция */
+function engB(m){G.si=0;stB(m)}
+function stB(m){const s=m.st[G.si],iso=new Set(),sel=new Set(),hp=()=>{let v=100-s.l0;s.it.forEach((it,i)=>{if(iso.has(i))v+=it[2]==1?s.rl:-35});return cl(v)};
+$("#play").innerHTML=`<div class="bwrap"><div class="bl" id="bl"></div><div><div class="srvb" id="srvb"></div><div class="zone" id="zone">Карантин: перетащи сюда объект</div><div class="det" id="det">Нажми на объект, чтобы изучить его.</div><div class="acts" id="ba" style="margin-top:10px"></div></div></div>`;
+const draw=()=>{const bl=$("#bl");bl.innerHTML="";s.it.forEach((it,i)=>{const b=h("button","itm"+(iso.has(i)?" q":"")+(sel.has(i)?" s":""),it[0]+(iso.has(i)?" <em>в карантине</em>":""));b.style.marginLeft=(it[3]||0)*14+"px";b.draggable=true;b.ondragstart=e=>e.dataTransfer.setData("text",i);
+b.onclick=()=>{if(G.over)return;if(iso.has(i)){iso.delete(i);msg("Объект возвращён из карантина.","warn")}else sel.has(i)?sel.delete(i):sel.add(i);$("#det").innerHTML="<b>"+it[0]+"</b><br>"+it[1];draw()};bl.append(b)});
+const v=hp();$("#srvb").innerHTML=`${srv(v)}<div><b>${v}%</b><br><small>${v>=75?"Работает стабильно":v>=40?"Предупреждение":"Критично"}</small></div>`},
+rep=()=>{const kp=[...iso].filter(i=>s.it[i][2]!=1);if(kp.length)msg(s.km.replace("%n",s.it[kp[0]][0]),"bad");else if(iso.size)msg(s.tm,"ok");draw()};
+$("#zone").ondragover=e=>e.preventDefault();$("#zone").ondrop=e=>{e.preventDefault();if(G.over)return;iso.add(+e.dataTransfer.getData("text"));sel.clear();rep()};
+bt(s.act,()=>{if(G.over)return;if(!sel.size)return msg("Сначала выбери объект.","warn");sel.forEach(i=>iso.add(i));sel.clear();rep()},"cta","#ba");
+bt(s.sc,()=>{if(G.over)return;const tg=s.it.map((x,i)=>x[2]==1?i:-1).filter(i=>i>=0),miss=tg.filter(i=>!iso.has(i)),kp=[...iso].filter(i=>s.it[i][2]!=1);
+$("#bl").classList.add("scan");setTimeout(()=>{$("#bl").classList.remove("scan");
+if(kp.length)return msg(s.km.replace("%n",s.it[kp[0]][0])+" Нажми на него в списке, чтобы вернуть.","bad");
+if(miss.length)return msg("Скан: угроза активна. Не изолировано объектов: "+miss.length+".","warn");
+if(G.si<m.st.length-1){msg(s.ok,"ok");G.si++;setTimeout(()=>stB(m),900)}else win(m)},RM?0:700)},"","#ba");
+msg(s.i,"");draw()}
+/* ENGINE C: настройка параметров */
+function engC(m){const v=m.p.map(p=>p[3]);G.hold=0;
+$("#play").innerHTML=`<div id="sls"></div>${m.dots?'<div id="dots"></div>':""}<div id="mets" class="mets"></div>`;
+const upd=()=>{const r=m.f(v);G.r=r;$("#mets").innerHTML=r.m.map(x=>`<div class="met ${x[3]?"g":"b"}"><span>${x[0]}</span><b>${x[1]}${x[2]}</b><i style="width:${Math.min(100,x[4]??x[1])}%"></i></div>`).join("");if(m.dots)$("#dots").innerHTML=r.dots.map(d=>`<i class="dt ${d[0]?"a":"h"}${d[1]?" x":""}"></i>`).join("")};
+m.p.forEach((p,k)=>{const l=h("label","sl",`<span>${p[0]}</span><output>${v[k]}</output>`),r=h("input");Object.assign(r,{type:"range",min:p[1],max:p[2],step:1,value:v[k]});r.oninput=()=>{v[k]=+r.value;l.querySelector("output").textContent=r.value;upd()};l.append(r);$("#sls").append(l)});upd();
+if(m.time)timer=setInterval(()=>{if(G.over||G.pz)return;G.t--;showT();const r=m.f(v);if(r.win){G.hold++;msg("Держим показатели: "+G.hold+" из "+m.hold+" с","warn");if(G.hold>=m.hold)return win(m)}else{G.hold=0;msg(r.msg,"warn")}if(G.t<=0)lose("Время вышло: магазин не выдержал пик.")},1000);
+else bt("Применить правила",()=>{if(G.over)return;G.r.win?win(m):msg(G.r.msg,"bad")},"cta")}
+/* ENGINE E: живая симуляция инфраструктуры */
+function engE(m){const F=m.init();G.F=F;const nodes=[["web","Магазин"],["db","База данных"],["auth","Вход"],["pay","Платежи"]];
+$("#play").innerHTML=`<div class="ops"><div class="nds">${nodes.map(n=>`<button class="nd" id="n_${n[0]}"><small>${n[1]}</small><b></b></button>`).join("")}</div><div id="emt"></div></div><div class="al" id="al"></div>`;
+const up=()=>{const v=m.V(F);nodes.forEach(([k])=>{const e=$("#n_"+k),x=v[k];e.className="nd "+(x>=75?"g":x>=40?"a":"r");e.querySelector("b").textContent=x+"%"});
+const ms=[["q","Очередь запросов",0],["heat","Нагрев серверов",0],["sy","Синхронизация БД",1]].filter(a=>v[a[0]]!=null).map(a=>{const x=v[a[0]],g=a[2]?x>=75:x<=50;return`<div class="met ${g?"g":"b"}"><span>${a[1]}</span><b>${x}%</b><i style="width:${x}%"></i></div>`});
+if(F.stock!=null)ms.push(`<div class="tick ${F.stock<75?"dn":""}">NXTR ${F.stock.toFixed(1)} ${F.stock<99?"▼":"■"}</div>`);if(m.res)ms.push(`<div class="met"><span>Ресурсы реагирования</span><b>${F.res}</b></div>`);
+$("#emt").innerHTML=`<div class="mets">${ms.join("")}</div>`;stage.classList.toggle("alarm",document.body.dataset.ch=="3"&&Math.min(v.web,v.db,v.auth,v.pay)<40)};
+const chk=()=>{if(m.win(F))return win(m);const l=m.lose&&m.lose(F);if(l)lose(l)};
+const act=id=>{if(G.over)return;const a=m.A.find(x=>x[0]==id);if(m.res&&F.res<a[2])return msg("Недостаточно ресурсов реагирования.","warn");if(m.res)F.res-=a[2];const r=a[3](F);up();msg(r[0],r[1]);chk()};
+m.A.forEach(a=>{const b=h("button","ab",a[1]+(m.res?` <em>${a[2]}</em>`:""));b.onclick=()=>act(a[0]);$("#al").append(b)});
+if(m.nd)nodes.forEach(([k])=>{$("#n_"+k).onclick=()=>act(m.nd[k])});
+up();timer=setInterval(()=>{if(G.over||G.pz)return;if(m.time){G.t--;showT()}m.tick&&m.tick(F);up();const l=m.lose&&m.lose(F);if(l)return lose(l);if(m.time&&G.t<=0)lose("Время вышло: кризис не остановлен.")},1000)}
+/* ЭКРАНЫ */
+function sIntro(){scr("0",`<section class="intro"><h1>КИБЕРКРИЗИС:<br>ПОСЛЕДНЯЯ ЛИНИЯ ЗАЩИТЫ</h1><p class="lead">Вы входите в интерактивный кибер-кризис: управляйте системами, от которых зависит цифровой мир.</p>
+<div class="vw" id="vw"><!-- Путь к фильму можно заменить в src --><video id="v" preload="metadata" playsinline><source src="assets/cybersecurity-film.mp4" type="video/mp4"></video><div class="vf" id="vf" hidden><div>Фильм не найден: assets/cybersecurity-film.mp4<br>Положите видео по этому пути. Игра работает и без него.</div></div><button class="pp" id="pp" aria-label="Воспроизвести">▶</button><input id="pb" type="range" min="0" max="100" step="0.1" value="0" aria-label="Перемотка"></div>
+<button class="cta" id="nx0">Далее</button></section>`);
+const v=$("#v"),nf=()=>{$("#vf").hidden=false;$("#pp").hidden=true;$("#pb").hidden=true};v.addEventListener("error",nf);v.querySelector("source").addEventListener("error",nf);
+$("#pp").onclick=()=>{if(v.paused){const p=v.play();p&&p.catch(nf)}else v.pause()};v.onplay=()=>$("#pp").style.opacity=0;v.onpause=()=>{$("#pp").style.opacity=.85;$("#pp").textContent="▶"};v.onclick=()=>$("#pp").click();
+v.ontimeupdate=()=>{$("#pb").value=v.duration?v.currentTime/v.duration*100:0};$("#pb").oninput=()=>{if(v.duration)v.currentTime=$("#pb").value/100*v.duration};$("#nx0").onclick=()=>{v.pause();sNews()}}
+const ILL=[`<svg viewBox="0 0 400 180"><rect width="400" height="180" fill="#0d2147"/>${[0,1,2,3,4,5,6].map(i=>`<rect x="${30+i*52}" y="${150-i*18-10}" width="34" height="${i*18+10}" fill="${i>4?"#ff9a3c":"#3cc8f0"}"/>`).join("")}</svg>`,`<svg viewBox="0 0 400 180"><rect width="400" height="180" fill="#0d2147"/><rect x="60" y="90" width="80" height="50" fill="#2a4a85"/><rect x="160" y="90" width="80" height="50" fill="#2a4a85"/><rect x="260" y="90" width="80" height="50" fill="#2a4a85"/><rect x="160" y="30" width="80" height="50" fill="#e5484d"/><path d="M100 90V80H200V80M300 90V80H200" stroke="#ff9a3c" stroke-width="3" fill="none"/></svg>`,`<svg viewBox="0 0 400 180"><rect width="400" height="180" fill="#0d2147"/><ellipse cx="200" cy="100" rx="110" ry="46" fill="#33518f"/><circle cx="150" cy="80" r="40" fill="#33518f"/><circle cx="230" cy="70" r="46" fill="#33518f"/><path d="M200 60l22 40h-44z" fill="#ff9a3c"/></svg>`,`<svg viewBox="0 0 400 180"><rect width="400" height="180" fill="#0d2147"/><path d="M200 20l70 25v50c0 40-30 62-70 75-40-13-70-35-70-75V45z" fill="#2a4a85" stroke="#3cc8f0" stroke-width="4"/><circle cx="215" cy="85" r="20" fill="none" stroke="#ff9a3c" stroke-width="5"/><path d="M230 100l24 24" stroke="#ff9a3c" stroke-width="5"/></svg>`];
+const NW=[["Black Friday: нагрузка на интернет-инфраструктуру резко растёт","Крупные магазины сообщают о четырёхкратном росте запросов. Серверы работают на пределе.","КРИТИЧНОСТЬ 4/10","m"],["PHP-приложения: обнаружена проблема в общей зависимости","Несколько приложений используют одну устаревшую библиотеку, и в ней найден дефект.","КРИТИЧНОСТЬ 6/10","m"],["Облачные сервисы: несколько систем демонстрируют признаки нестабильности","Очереди заданий растут, базы данных отвечают всё медленнее.","КРИТИЧНОСТЬ 7/10",""],["Специалистам по кибербезопасности поручено расследование","Команде нужен администратор, который соберёт защиту. Эта работа поручена вам.","КРИТИЧНОСТЬ 8/10",""]];
+function sNews(){let i=0;const N=NW.length;scr("0",`<section class="news"><h1>Последние новости</h1><p class="lead">Вымышленные сообщения из мира игры. Листайте карточки.</p><div class="vp"><div class="trk" id="trk" tabindex="0" aria-label="Новости">${NW.map((n,k)=>`<div class="nc"><article>${ILL[k]}<div class="tx"><span class="sev ${n[3]}">${n[2]}</span><h2>${n[0]}</h2><p>${n[1]}</p></div></article></div>`).join("")}</div></div>
+<div class="nav"><button id="pv" aria-label="Назад">‹</button><b id="ct"></b><button id="nt" aria-label="Вперёд">›</button></div><button class="cta" id="nx1"></button></section>`);
+const tr=$("#trk");let x0=null,dx=0;
+const go=n=>{i=Math.max(0,Math.min(N-1,n));tr.style.transition="";tr.style.transform=`translateX(${-i*100}%)`;$("#ct").textContent=(i+1)+"/"+N;$("#nx1").textContent=i<N-1?"Далее":"К первой миссии";$("#pv").disabled=!i;$("#nt").disabled=i==N-1};
+tr.onpointerdown=e=>{x0=e.clientX;dx=0;tr.setPointerCapture(e.pointerId);tr.style.transition="none"};
+tr.onpointermove=e=>{if(x0==null)return;dx=e.clientX-x0;tr.style.transform=`translateX(calc(${-i*100}% + ${dx}px))`};
+tr.onpointerup=tr.onpointercancel=()=>{if(x0==null)return;x0=null;go(dx<-50?i+1:dx>50?i-1:i)};
+tr.onkeydown=e=>{if(e.key=="ArrowRight")go(i+1);if(e.key=="ArrowLeft")go(i-1)};
+$("#pv").onclick=()=>go(i-1);$("#nt").onclick=()=>go(i+1);$("#nx1").onclick=()=>i<N-1?go(i+1):resume();go(0)}
+function resume(){const fu=M.findIndex(x=>!S.done[x.id]);fu<0?sEnd():fu==0?sChap(1):open(fu)}
+const CH={1:["КИБЕР-ЛАБОРАТОРИЯ","Создай свою защиту: собирай системы из блоков и смотри, как они работают."],2:["РЕАГИРОВАНИЕ НА ИНЦИДЕНТЫ","Классическая защита: расследуй, изолируй, очищай и восстанавливай."]};
+function sChap(c){scr(String(c),`<section class="chap"><p class="lead">ГЛАВА ${c}</p><h1>${CH[c][0]}</h1><p class="lead">${CH[c][1]}</p><button class="cta" id="st">Начать</button></section>`);$("#st").onclick=()=>open((c-1)*5)}
+function sPaper(){scr("p",`<article class="paper"><div class="mast">ЦИФРОВОЙ ВЕСТНИК · СПЕЦВЫПУСК</div><h1>BLACK OCTOBER: КРИЗИС НАБИРАЕТ ОБОРОТЫ</h1>
+<div class="sevx">9,2 / 10 — КРИТИЧЕСКИЙ УРОВЕНЬ<small>Игровой индекс серьёзности. Вымышленный показатель: не реальное измерение и не официальная оценка уязвимости.</small></div>
+<div class="pg"><div><svg viewBox="0 0 400 200"><rect width="400" height="200" fill="#2a2420"/>${[0,1,2,3].map(i=>`<rect x="${24+i*92}" y="30" width="72" height="150" fill="#14100d" stroke="#555"/>${[0,1,2,3,4].map(j=>`<circle cx="${40+i*92}" cy="${50+j*26}" r="5" fill="${(i+j)%3?"#ff3b3b":"#ff9a3c"}"><animate attributeName="opacity" values="1;.3;1" dur="${1+((i*j)%3)*.4}s" repeatCount="indefinite"/></circle>`).join("")}`).join("")}</svg>
+<p><b>Чёрный октябрь:</b> каскадный отказ затрагивает критические цифровые сервисы. Системы защиты сдерживают отдельные угрозы, но общая инфраструктура продолжает деградировать.</p><p>Вымышленная компания «НексТорг» (NXTR) не может принимать оплату. Причина: экстремальный спрос Чёрной пятницы, уязвимая общая PHP-зависимость и сбои в восстановлении сервисов сложились в один кризис.</p></div>
+<div><div class="stat"><div><b id="un">0</b>сервисов недоступно</div><div><b id="tk">100.0</b>NXTR ▼</div></div><h3>Хронология каскада</h3><ul class="tl"><li><b>06:10</b> Трафик ×4</li><li><b>07:45</b> Сбои в PHP-приложениях</li><li><b>09:20</b> Очереди переполнены</li><li><b>10:05</b> Платежи недоступны</li></ul></div></div>
+<p><small>Все события, компании и цифры вымышлены и принадлежат сюжету игры.</small></p><div style="text-align:center"><button class="cta" id="tk2" style="background:#a3141b;color:#fff">ПРИНЯТЬ УПРАВЛЕНИЕ КРИЗИСОМ</button></div></article>`);
+let k=0;timer=setInterval(()=>{k++;$("#un").textContent=Math.min(47,k*3);$("#tk").textContent=Math.max(63.2,100-k*2.4).toFixed(1);if(k>16)stop()},180);beep(110,.5,"sawtooth");$("#tk2").onclick=()=>open(10)}
+function sEnd(){if(score()<15)return resume();if(!S.date)S.date=new Date().toLocaleDateString("ru-RU");if(!S.cid)S.cid="CR-"+Date.now().toString(36).toUpperCase()+"-"+Math.random().toString(36).slice(2,6).toUpperCase();save();
+scr("e",`<section style="text-align:center"><div class="ring">✓</div><h1>Инфраструктура восстановлена</h1><p class="lead">Все 15 миссий пройдены. Кризис остановлен.</p><label>Имя участника: <input id="pn" maxlength="60" placeholder="Введите имя" style="padding:8px;border-radius:8px;background:#0f1a30;border:1px solid var(--ln)"></label>
+<article class="cert"><h2>СЕРТИФИКАТ УСПЕШНОГО ПРОХОЖДЕНИЯ</h2><p class="a">КИБЕРБЕЗОПАСНОСТЬ И УСТОЙЧИВОСТЬ ИНФРАСТРУКТУРЫ</p><h3 id="cn"></h3><p>Участник успешно завершил 15 интерактивных миссий учебного симулятора Cyber Resilience: Black October, набрал 15 из 15 баллов и продемонстрировал практическое понимание защиты PHP-приложений, расследования инцидентов, безопасного обновления, восстановления сервисов и устойчивой инфраструктуры.</p><p><b>Результат: 15/15</b> · Дата: ${S.date} · № ${S.cid}</p><small>Учебный сертификат симулятора. Не является профессиональной квалификацией, аккредитацией или отраслевой сертификацией.</small></article>
+<div class="acts" style="justify-content:center"><button class="cta" id="pr">ПЕЧАТЬ / СОХРАНИТЬ В PDF</button><button id="rp">Играть заново</button></div></section>`);
+const pn_=$("#pn"),cn=$("#cn"),u=()=>cn.textContent=pn_.value||"Имя участника";pn_.value=S.name;u();pn_.oninput=()=>{S.name=pn_.value;save();u()};$("#pr").onclick=()=>print();$("#rp").onclick=restart;burst()}
+function restart(){if(!confirm("Начать игру заново? Весь прогресс и сертификат будут потеряны."))return;S={done:{},name:"",cid:"",date:"",snd:S.snd};save();$$(".modal").forEach(e=>e.remove());sIntro()}
+function pause(){G.pz=1;const o=h("div","modal",`<div class="card" role="dialog" aria-label="Меню"><h2>Пауза</h2><label><input type="checkbox" id="sn" ${S.snd?"checked":""}> Звуковые эффекты</label><p class="lead">Прогресс сохраняется автоматически. Баллов: ${score()}/15.</p><div class="acts"><button class="cta" id="cl">Продолжить</button><button class="gh" id="rsb">Начать игру заново…</button></div></div>`);document.body.append(o);
+const c=()=>{G.pz=0;o.remove()};$("#cl").onclick=c;$("#sn").onchange=e=>{S.snd=e.target.checked?1:0;save()};$("#rsb").onclick=()=>{G.pz=0;restart();if($(".modal"))G.pz=1}}
+addEventListener("keydown",e=>{if(e.key=="Escape"&&cur>=0&&!$(".modal"))pause()});
+sIntro();
+</script></body></html>
